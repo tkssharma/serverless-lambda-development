@@ -1,0 +1,30 @@
+service: media-function
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  profile: default
+  region: ${opt:region, 'us-east-1'}
+  deploymentBucket: my-bucket  # Replace with your bucket name
+
+iamRoleStatements:
+  - Effect: Allow
+    Action:
+        - s3:*
+    Resource:
+        - "*"
+
+functions:
+   mediafunction:
+      handler: handler.mediaHandler
+      layers:
+        - arn:aws:lambda:us-east-1:XXXXXXXXXXXX:layer:medialayer:1 # Put Your layer ARN here
+      timeout: 20
+      events:
+         - s3:
+            bucket: mybucket # replace with the bucket name in which images will be uploaded
+            existing: true
+            event: s3:ObjectCreated:*
+            rules:
+              - prefix: contents/
