@@ -1,0 +1,63 @@
+service: express-serverless
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-west-1
+  stage: ${env:NODE_ENV}
+  environment:
+    NODE_ENV: ${env:NODE_ENV}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'secretsmanager:GetSecretValue'
+      Resource:
+        - '*'
+
+package:
+  exclude:
+    - node_modules/**
+    - src/**
+
+layers:
+  nodeModules:
+    path: layer
+    compatibleRuntimes:
+      - nodejs12.x
+
+resources:
+  Resources:
+    LambdaSecurityGroup:
+      Properties:
+        GroupDescription: Lambda security group
+        GroupName: !Join
+          - '-'
+          - - express-lambda-
+            - ${env:NODE_ENV}
+            - private-sg
+        VpcId: 'vpc-a2918ac0'
+      Type: AWS::EC2::SecurityGroup
+
+functions:
+  app:
+    handler: dist/app.handler
+    layers:
+      - {Ref: NodeModulesLambdaLayer}
+    events:
+      - http:
+          path: /api
+          method: ANY
+          cors: true
+      - http:
+          path: /api/{proxy+}
+          method: ANY
+          cors: true
+    vpc:
+      securityGroupIds:
+        - {Ref: LambdaSecurityGroup}
+      subnetIds:
+        - "subnet-7963881c"
+        - "subnet-35392e41"
+        - "subnet-75af9b33"
+
+plugins:
+  - serverless-offline
