@@ -3,10 +3,10 @@ service: serverless-rest-api-with-dynamodb
 provider:
   name: aws
   stage: dev
-  region: us-east-1
+  region: local
   runtime: nodejs10.x
   environment:
-    DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    DYNAMODB_TABLE: test
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -85,4 +85,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        TableName: test

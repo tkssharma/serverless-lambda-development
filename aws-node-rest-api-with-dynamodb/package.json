@@ -8,7 +8,7 @@
     "start": "serverless offline start"
   },
   "dependencies": {
-    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-dynamodb-local": "^0.2.30",
     "uuid": "^2.0.3"
   },
   "devDependencies": {

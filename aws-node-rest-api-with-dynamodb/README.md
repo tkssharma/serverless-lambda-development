@@ -179,6 +179,7 @@ custom:
 
 ### Finally Start application offline 
 ```
+➜ sls dynamodb install
 ➜ serverless offline start
 Serverless: To ensure safe major version upgrades ensure "frameworkVersion" setting in service configuration (recommended setup: "frameworkVersion: ^2.28.0")
 
@@ -210,5 +211,14 @@ h-dynamodb-dev-update/invoke-async/
 offline: [HTTP] server ready: http://localhost:3000 🚀
 offline: 
 offline: Enter "rp" to replay the last request
+```
+
+### Access DynamoDB from Code 
+
+```
+const dynamoDb = new AWS.DynamoDB.DocumentClient({
+  region: 'localhost',
+  endpoint: 'http://localhost:8000'
+})
 ```
 

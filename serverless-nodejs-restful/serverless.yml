@@ -15,13 +15,6 @@ provider:
   runtime: nodejs10.x
   stage: dev
   region: us-east-1
-  # To load environment variables externally
-  # rename env.example to .env and uncomment
-  # the following line. Also, make sure to not
-  # commit your .env.
-  #
-  #environment:
-  #  SAMPLE_ENV_VAR: ${env:SAMPLE_ENV_VAR}
 
 functions:
   hello:
