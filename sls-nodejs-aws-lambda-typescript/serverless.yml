@@ -1,0 +1,27 @@
+service: sls-nodejs-aws-lambda-layers
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: us-east-1
+  stage: ${opt:stage,'dev'}
+package:
+  individually: true
+plugins:
+  # - serverless-stage-manager
+  - serverless-webpack
+  - serverless-offline
+
+functions:
+  hello:
+    handler: functions/hello.handle
+    layers:
+      - {Ref: CommonLambdaLayer}
+
+layers:
+  common:
+    path: layers/common
+    name: sls-common-${self:provider.stage}
+    description: Common libs layer for nodejs functions
+    compatibleRuntimes:
+      - nodejs10.x
