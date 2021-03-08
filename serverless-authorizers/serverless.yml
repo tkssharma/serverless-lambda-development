@@ -3,28 +3,27 @@ service: serverless-authorizers
 provider:
   name: aws
   runtime: nodejs6.10
-
   stage: dev
+  profile: serverless-user
   region: us-east-1
 
-
-functions:
-  authorizerUser:
-    handler: authorizer.user
-  helloRest:
-    handler: helloRest.handler
-    events:
-      - http:
-          path: hello/rest
-          method: get
-          authorizer: ${self:custom.authorizer.users}
-  helloRestIam:
-    handler: helloRestIam.handler
-    events:
-      - http:
-          path: hello/restiam
-          method: get
-          authorizer: aws_iam
+  functions:
+    authorizeUser:
+      handler: authorize.user
+    helloRest:
+      handler: helloRest.handler
+      events:
+        - http:
+            path: hello/test
+            method: get
+            authorizer: ${self.custom.authorizer.users}
+    helloRestIam:
+      handler: helloRestIam.handler
+      events:
+        - http:
+            path: hello/test
+            method: get
+            authorizer: aws_iam    
 
 custom:
   stage: ${opt:stage, self:provider.stage}
@@ -34,4 +33,3 @@ custom:
       type: TOKEN
       identitySource: method.request.header.Authorization
       identityValidationExpression: Bearer (.*)
-

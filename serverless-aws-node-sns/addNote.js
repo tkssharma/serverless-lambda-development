@@ -1,7 +1,6 @@
 'use strict';
 
-const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
-const config = require('./config.js');
+const AWS = require('aws-sdk'); 
 
 const sns = new AWS.SNS();
 
@@ -19,7 +18,7 @@ module.exports.addNote = (event, context, callback) => {
 
   const params = {
     Message: data.note,
-    TopicArn: `arn:aws:sns:us-east-1:${config.awsAccountId}:analyzeNote`,
+    TopicArn: `arn:aws:sns:us-east-1:146050578321:analyzeNote`,
   };
 
   sns.publish(params, (error) => {
